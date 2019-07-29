@@ -15,7 +15,7 @@
                     """,
     'depends': ['point_of_sale'],
     'data': ['views/barcode.xml'],
-    'images': ['static/description/banner.png'],
+    'images': ['static/description/banner.jpg'],
     'installable': True,
     'auto_install': False,
     'application': False

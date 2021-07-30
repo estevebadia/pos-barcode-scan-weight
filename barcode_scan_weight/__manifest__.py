@@ -4,7 +4,7 @@
 
 {
     'name': 'Barcode Scan With Weight Screen',
-    'version': '13.0.1.0.1',
+    'version': '14.0.1.0.1',
     'category': 'Point Of Sale',
     'author': 'Candidroot Solutions Pvt. Ltd.',
     'license': 'AGPL-3',

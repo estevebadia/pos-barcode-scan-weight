@@ -1,23 +1,27 @@
-odoo.define('barcode_scan_weight.barcode',function(require) {
-	"use strict";
-	var screens = require('point_of_sale.screens');
-	screens.ScreenWidget.include({
-		barcode_product_action: function(code){
-	        var self = this;
-	        var product = this.pos.db.get_product_by_barcode(code.base_code);
-	        
-	        if(product.to_weight && this.pos.config.iface_electronic_scale){
-	        	return this.gui.show_screen('scale',{product: product});
-	        }
-	        
-	        if (self.pos.scan_product(code)) {
-	            if (self.barcode_product_screen) {
-	                self.gui.show_screen(self.barcode_product_screen, null, null, true);
-	            }
-	        } else {
-	            this.barcode_error_action(code);
-	        }
-	    },
-		
-	});
+odoo.define('barcode_scan_weight.new_barcode', function (require) {
+    'use strict';
+
+    const ProductScreen = require('point_of_sale.ProductScreen');
+    const Registries = require('point_of_sale.Registries');
+    const { useBarcodeReader } = require('point_of_sale.custom_hooks');
+    const { useListener } = require('web.custom_hooks');
+    const { useContext } = owl.hooks;
+
+    const PosBarcodeProductScreen = (ProductScreen) =>
+        class extends ProductScreen {
+            _barcodeProductAction(code) {
+               var self = this;
+	            const product = this.env.pos.db.get_product_by_barcode(code.code);
+                if(product.to_weight && this.env.pos.config.iface_electronic_scale){
+                    const { confirmed, payload } = this.showTempScreen('ScaleScreen', {product:product});
+                }
+                if (!this.env.pos.scan_product(code)) {
+                    this._barcodeErrorAction(code);
+                }
+            }
+        };
+
+    Registries.Component.extend(ProductScreen, PosBarcodeProductScreen);
+
+    return ProductScreen;
 });

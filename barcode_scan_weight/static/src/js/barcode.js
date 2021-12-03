@@ -6,7 +6,7 @@ odoo.define('barcode_scan_weight.barcode',function(require) {
 	        var self = this;
 	        var product = this.pos.db.get_product_by_barcode(code.base_code);
 	        
-	        if(product.to_weight && this.pos.config.iface_electronic_scale){
+	        if(product && product.to_weight && this.pos.config.iface_electronic_scale){
 	        	return this.gui.show_screen('scale',{product: product});
 	        }
 	        
